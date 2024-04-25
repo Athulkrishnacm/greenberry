@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const serviceController = require('./controller/serviceController');
 const serviceModel = require('./model/serviceModel');
 
-const sendEmail =  require('./sendMail');
+const { sendEmail } = require('./sendMail');
 
 const port = 3000;
 

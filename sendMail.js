@@ -45,4 +45,4 @@ const sendEmail = async (details) => {
 };
 
 
-module.exports = sendEmail,generateEmailContent;;
+module.exports = sendEmail;
