@@ -36,23 +36,55 @@ mongoose.connect(dbUrl)
     console.error('Error connecting to database:', error);
   });
 
-// Routes
-app.get('/', async (req, res) => {
-  try {
-    if (req.session.adminid) {
-
-      const UsersData = await serviceModel.find({}).limit(10);
-      const userCount = await serviceModel.find({}).count();
-      res.render('index', { Users: UsersData, userCount: userCount });
-    } else {
-      res.redirect('/login');
+  app.get('/', async (req, res) => {
+    try {
+      if (req.session.adminid) {
+        const UsersData = await serviceModel.find({}).limit(10);
+        const userCount = await serviceModel.countDocuments({});
+  
+        const currentDate = new Date();
+  
+        // Calculate counts based on proximity to end date
+        const clientsByEndDateCount = {
+          red: await serviceModel.countDocuments({
+            endDate: {
+              $lte: new Date(currentDate.getTime() + 5 * 24 * 60 * 60 * 1000) // 5 days before current date
+            }
+          }),
+          yellow: await serviceModel.countDocuments({
+            endDate: {
+              $gt: new Date(currentDate.getTime() + 5 * 24 * 60 * 60 * 1000), // More than 5 days before current date
+              $lte: new Date(currentDate.getTime() + 25 * 24 * 60 * 60 * 1000) // 25 days before current date
+            }
+          }),
+          green: await serviceModel.countDocuments({
+            endDate: {
+              $gt: new Date(currentDate.getTime() + 25 * 24 * 60 * 60 * 1000) // More than 25 days before current date
+            }
+          })
+        };
+  
+        // Adjust yellow count to exclude red clients
+        clientsByEndDateCount.yellow -= clientsByEndDateCount.red;
+        res.render('index', {
+          Users: UsersData, // Assuming UsersData is defined earlier in your route handler
+          userCount: userCount, // Assuming userCount is defined earlier in your route handler
+          clientsByEndDateCount: {
+              red: clientsByEndDateCount.red < 1 ? 0 : clientsByEndDateCount.red,
+              yellow: clientsByEndDateCount.yellow < 1 ? 0 : clientsByEndDateCount.yellow,
+              green: clientsByEndDateCount.green < 1 ? 0 : clientsByEndDateCount.green
+          }
+      }); 
+        // console.log(clientsByEndDateCount, "hello");
+      } else {
+        res.redirect('/login');
+      }
+    } catch (error) {
+      console.error('Error rendering index:', error);
+      res.status(500).send('Internal Server Error');
     }
-  } catch (error) {
-    console.error('Error rendering index:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
+  });
+  
 
 app.get('/logout', (req, res) => {
   
@@ -90,22 +122,35 @@ app.post('/login', serviceController.verifyLogin);
 app.get('/userdata', serviceController.dashboard)
 
 
-// Route to send email
-app.post('/sendEmail', async (req, res) => {
-  try {
-      // Assuming req.body contains the client details
-      const clientDetails = req.body;
+  const getEmailData = async () => {
+    try {
+        const data = await serviceModel.find({ }).limit(1).exec();
+        return data;
+    } catch (error) {
+        console.error('Error fetching email data:', error);
+        throw error;
+    }
+  };
 
-      // Send email with client details using sendEmail function
-      await sendEmail(clientDetails);
+  app.post('/sendEmailWithData', async (req, res) => {
+    try {
+      const data = await getEmailData();
+        const clientDetails = data.length > 0 ? data[0] : {}; 
 
-      res.status(200).send('Email sent successfully');
-  } catch (error) {
-      console.error('Error sending email:', error);
-      res.status(500).send('Internal Server Error');
-  }
-});
+        if (Object.keys(clientDetails).length === 0) {
+            throw new Error('No client details found in the database');
+        }
 
+      console.log(clientDetails);
+
+        await sendEmail(clientDetails);
+
+        res.status(200).send('Email sent successfully');
+    } catch (error) {
+        console.error('Error sending email with data:', error);
+        res.status(500).send('Internal Server Error');
+    }
+  });
 
 
 // Start the server

@@ -1,40 +1,40 @@
 const { name } = require('ejs');
 const servicePlan = require ('../model/serviceModel')
 const nodemailer = require('nodemailer');
-
+const serviceModel = require('../model/serviceModel');
 
 const serviceInsert = async (req, res) => {
-    
     try {
-        
-        const startDate = new Date(req.body.startDate);
-        const endDate = new Date(req.body.endDate);
-
-        const formatDate = (date) => {
+        // Define the formatDate function to format dates as needed
+        const formatDate = (dateString) => {
+            const date = new Date(dateString);
             const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0'); 
-            const day = String(date.getDate()).padStart(2, '0'); 
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
         };
 
-        const insertservicedata = new servicePlan({
+        // Create a new servicePlan document
+        const insertServiceData = new servicePlan({
             name: req.body.name,
             phoneNumber: req.body.Phonenumber,
             placelocation: req.body.place,
             plan: req.body.plan,
-            startDate: formatDate(startDate), 
-            endDate: formatDate(endDate), 
+            startDate: formatDate(req.body.startDate), // Format start date
+            endDate: formatDate(req.body.endDate), // Format end date
             comment: req.body.comment
         });
 
-        await insertservicedata.save();
+        // Save the document to the database
+        await insertServiceData.save();
+        
+        // Redirect to '/data' after successful save
         res.redirect('/data');
-        // console.log(insertservicedata, "Data saved successfully");
-
     } catch (error) {
-        console.log(error);
+        console.error('Error saving service data:', error);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
 
 
 
@@ -120,15 +120,15 @@ const deleteservice = async (req, res) => {
     try {
         const deletedData = await servicePlan.findByIdAndDelete(req.params.id);
         if (!deletedData) {
-            return res.status(404).send('Data not found');
+            return res.status(404).send('Data not found'); // Respond with 404 if data not found
         }
-        res.send('Data deleted successfully');
-        window.location.reload();
+        res.status(200).send('Data deleted successfully'); // Respond with success message
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 
 
