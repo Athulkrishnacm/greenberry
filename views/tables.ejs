@@ -8,7 +8,7 @@
 
     <!-- With actions -->
     <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-      <button id="sendEmailButton">Send Email</button>
+      
     </h4>
     <div class="w-full overflow-hidden rounded-lg shadow-xs">
       <div class="w-full overflow-x-auto">
@@ -24,122 +24,10 @@
             </tr>
           </thead>
 <!-- Modal for Editing -->
-<div class="modal fade " id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form method="post" action="/submit">
-          <main class="h-full pb-16 overflow-y-auto">
-                    <div class="container px-6 mx-auto grid">
-                      <h2
-                        class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
-                      >
-                        Client Data
-                      </h2>
-                      
-                      <!-- General elements -->
-                     
-                      <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                        <!-- Custom Name Field -->
-                        <label class="block text-sm">
-                          <span  class="text-gray-700 dark:text-gray-400" >name</span>
-                          <input
-                           name="name" type="text" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                            placeholder="Customer's Name"
-                          > 
-                        </label>
-                      
-                        <label class="block mt-4 text-sm">
-                          <span class="text-gray-700 dark:text-gray-400">Phone Number</span>
-                          <input
-                              name="Phonenumber"
-                              type="number"
-                              pattern="[0-9]*"
-                              oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
-                              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:-gray-300 dark:focus:shadow-outline-gray form-input"
-                              placeholder="Customer's Phone Number"
-                          />
-                      </label>
-                      
-                        <!-- Custom Place Location Field -->
-                        <label class="block mt-4 text-sm">
-                          <span class="text-gray-700 dark:text-gray-400">Place Location</span>
-                          <input
-                            name="place" type="" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                            placeholder=
-                          />
-                        </label>
-          
-                        <!-- Select Plan Field -->
-                        <label class="block mt-4 text-sm">
-                          <span class="text-gray-700 dark:text-gray-400">Select Plan</span>
-                          <select
-                           name="plan" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                          >
-                            <option value="3m" selected>3 Months</option>
-                            <option value="6m">6 Months</option>
-                            <option value="9m">9 Months</option>
-                            <option value="1y">1 Year</option>
-                          </select>
-                        </label>
-                      
-                        <!-- Date Field -->
-                        <label class="block mt-4 text-sm">
-                          <span class="text-gray-700 dark:text-gray-400">Start Date</span>
-                          <input
-                            type="date"
-                            id="startDate"
-                            name="startDate"
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                            placeholder="Select Start Date"
-                            onchange="updateEndDate()"
-                          ></input>
 
-                        </label>
-          
-                        <label class="block mt-4 text-sm">
-                          <span class="text-gray-700 dark:text-gray-400">End Date (90 days after start date)</span>
-                          <input
-                            type="date"
-                            id="endDate"
-                            name="endDate"
-                            class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                            placeholder="Automatically calculated"
-                            readonly
-                          />
-                        </label>
-                      
-                        
-                      
-                        <!-- Comment Field -->
-                        <label class="block mt-4 text-sm">
-                          <span class="text-gray-700 dark:text-gray-400">Comment</span>
-                          <textarea
-                           name="comment" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                            rows="3"
-                            placeholder="Enter any additional comments or details."
-                          ></textarea>
-                        </label>
-                      </div>
-                      <button type="submit" name="submit">Submit</button>
-             
-                    
-                    </div>
-                  </main>
-                </div>
-              </div>
-          </form>   
-        
-      </div>
-    </div>
   </div>
 </div>
+
 
 <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
   <% dataservice.forEach((data, index) => { %>
@@ -153,36 +41,36 @@
       <td class="px-4 py-3">
         <div class="flex items-center space-x-4 text-sm">
           <button class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray border border-white"
-          aria-label="Edit"
-          onclick="populateEditModal('<%- encodeURIComponent(JSON.stringify(data)) %>')"
-          data-toggle="modal"
-          data-target="#editModal"
-  >
-    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-      <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-    </svg>
-    Edit
-  </button>
-  
+            aria-label="Edit"
+            onclick="populateEditModal('<%- encodeURIComponent(JSON.stringify(data)) %>')"
+            data-toggle="modal"
+            data-target="#editModal"
+          >
+            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+            </svg>
+            Edit
+          </button>
+      
           <button
-onclick="deleteData('<%= data._id %>')" 
-class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-aria-label="Delete"
->
-<svg
-    class="w-5 h-5"
-    aria-hidden="true"
-    fill="currentColor"
-    viewBox="0 0 20 20"
->
-    <path
-        fill-rule="evenodd"
-        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-        clip-rule="evenodd"
-    ></path>
-</svg>
-Delete
-</button>
+            onclick="deleteData('<%= data._id %>')" 
+            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+            aria-label="Delete"
+          >
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            Delete
+          </button>
         </div>
       </td>
     </tr>
@@ -197,74 +85,164 @@ Delete
     </div>
   </div>
 
+  <form method="post" action="/editsubmit" >
+    <div class="modal fade " id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           
+    
+              <main class="h-full pb-16 overflow-y-auto">
+                        <div class="container px-6 mx-auto grid">
+                          <h2
+                            class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+                          >
+                            Client Data
+                          </h2>
+                          
+                          <!-- General elements -->
+                         
+                          <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                            <!-- Custom Name Field -->
+                            <label class="block text-sm">
+                              <span  class="text-gray-700 dark:text-gray-400" >name</span>
+                              <input
+                               name="editname" id="editname" type="text" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                placeholder="Customer's Name"
+                              > 
+                            </label>
+                          
+                            <label class="block mt-4 text-sm">
+                              <span class="text-gray-700 dark:text-gray-400">Phone Number</span>
+                              <input
+                              id="editphoneNumber"
+                                  name="editPhonenumber"
+                                  type="number"
+                                  pattern="[0-9]*"
+                                  oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                                  class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:-gray-300 dark:focus:shadow-outline-gray form-input"
+                                  placeholder="Customer's Phone Number"
+                              />
+                          </label>
+                          
+                            <!-- Custom Place Location Field -->
+                            <label class="block mt-4 text-sm">
+                              <span class="text-gray-700 dark:text-gray-400">Place Location</span>
+                              <input
+                              id="editplace"
+                                name="editplace" type="" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                placeholder=
+                              />
+                            </label>
+              
+                            <!-- Select Plan Field -->
+                            <label class="block mt-4 text-sm">
+                              <span class="text-gray-700 dark:text-gray-400">Select Plan</span>
+                              <select
+                              id="editplan"
+                               name="editplan" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                              >
+                                <option value="3m" selected>3 Months</option>
+                                <option value="6m">6 Months</option>
+                                <option value="9m">9 Months</option>
+                                <option value="1y">1 Year</option>
+                              </select>
+                            </label>
+                          
+                            <!-- Date Field -->
+                            <label class="block mt-4 text-sm">
+                              <span class="text-gray-700 dark:text-gray-400">Start Date</span>
+                              <input
+                              id="editstartDate"
+                                type="date"
+                                id="editstartDate"
+                                name="editstartDate"
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                placeholder="Select Start Date"
+                                onchange="updateEndDate()"
+                              ></input>
+    
+                            </label>
+              
+                            <label class="block mt-4 text-sm">
+                              <span class="text-gray-700 dark:text-gray-400">End Date (90 days after start date)</span>
+                              <input
+                              id="editendDate"
+                                type="date"
+                                id="editendDate"
+                                name="editendDate"
+                                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                                placeholder="Automatically calculated"
+                                readonly
+                              />
+                            </label>
+                          
+                            
+                          
+                            <!-- Comment Field -->
+                            <label class="block mt-4 text-sm">
+                              <span class="text-gray-700 dark:text-gray-400">Comment</span>
+                              <textarea
+                              id="editcomment"
+                               name="ceditomment" class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                                rows="3"
+                                placeholder="Enter any additional comments or details."
+                              ></textarea>
+                            </label>
+                          </div>
+                          <button type="submit" name="submit">Submit</button>
+                 
+                        
+                        </div>
+                      </main>
+                    </div>
+                  </div>
+             
+    
+            
+          </div>
+        </div>
+      </form> 
+  
 </main>
 
 
 
 
-<script>
-  const sendEmail = async () => {
-      try {
-          const response = await fetch('/sendEmail', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                  name: 'athul',
-                  phoneNumber: 4567890,
-                  placelocation: 'dfghjkl',
-                  plan: '6m',
-                  startDate: '2024-04-24T00:00:00.000Z',
-                  endDate: '2024-10-21T00:00:00.000Z',
-                  comment: 'jn adcv/ljbca'
-              })
-          });
 
-          if (response.ok) {
-              alert('Email sent successfully');
-          } else {
-              throw new Error('Failed to send email');
-          }
-      } catch (error) {
-          console.error('Error sending email:', error.message);
-          alert('Failed to send email');
+<script>
+  function populateEditModal(data) {
+    try {
+      // Parse the data
+      const parsedData = JSON.parse(decodeURIComponent(data));
+      console.log('Parsed Data:', parsedData);
+
+      // Check if the required properties exist in the parsed data
+      if (!parsedData.hasOwnProperty('name') || !parsedData.hasOwnProperty('phoneNumber')) {
+        console.error('Missing required properties in parsed data');
+        return;
       }
-  };
 
-  const sendEmailButton = document.getElementById('sendEmailButton');
-  sendEmailButton.addEventListener('click', sendEmail);
-</script>
-
-
-
-
-
-
-
-<script>
-const deleteData = (id) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', `/data/${id}`, true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-
-  xhr.onload = function () {
-    if (xhr.status >= 200 && xhr.status < 300) {
-      const response = JSON.parse(xhr.responseText);
-      console.log('Response:', response);
-      window.location.reload(); // Refresh the page after successful deletion
-    } else {
-      console.error('Error deleting data:', xhr.statusText);
+      // Populate input fields with data
+      document.getElementById('editname').value = parsedData.name;
+      document.getElementById('editphoneNumber').value = parsedData.phoneNumber;
+      document.getElementById('editplace').value = parsedData.placelocation || '';
+      document.getElementById('editplan').value = parsedData.plan || '';
+      document.getElementById('editstartDate').value = parsedData.startDate ? parsedData.startDate.split('T')[0] : '';
+      document.getElementById('editendDate').value = parsedData.endDate ? parsedData.endDate.split('T')[0] : '';
+      document.getElementById('editcomment').value = parsedData.comment || '';
+    } catch (error) {
+      console.log('Error populating edit modal:', error);
     }
-  };
-
-  xhr.onerror = function () {
-    console.error('Request failed');
-  };
-
-  xhr.send(); // Send the POST request
-};
+  }
 </script>
+
 <script>
   function populateEditModal(data) {
     document.getElementById('editName').value = data.name;
@@ -276,16 +254,86 @@ const deleteData = (id) => {
     // Implement saving changes logic here
   }
 </script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-  function populateEditModal(data) {
-  document.getElementById('editName').value = data.name;
-  document.getElementById('editPhoneNumber').value = data.phoneNumber;
-  document.getElementById('editPlace').value = data.place;
-  document.getElementById('editPlan').value = data.plan;
-  document.getElementById('editStartDate').value = data.startDate.split('T')[0];
-  document.getElementById('editEndDate').value = data.endDate.split('T')[0];
-  document.getElementById('editComment').value = data.comment;
+function populateEditModal(data) {
+  try {
+    // Parse the data
+    const parsedData = JSON.parse(decodeURIComponent(data));
+    console.log('Parsed Data:', parsedData);
+
+    // Check if the required properties exist in the parsed data
+    if (!parsedData.hasOwnProperty('name') || !parsedData.hasOwnProperty('phoneNumber')) {
+      console.error('Missing required properties in parsed data');
+      return;
+    }
+
+    // Populate input fields with data
+    document.getElementById('editname').value = parsedData.name;
+    document.getElementById('editphoneNumber').value = parsedData.phoneNumber;
+    document.getElementById('editplace').value = parsedData.placelocation || '';
+    document.getElementById('editplan').value = parsedData.plan || '';
+    document.getElementById('editstartDate').value = parsedData.startDate ? parsedData.startDate.split('T')[0] : '';
+    document.getElementById('editendDate').value = parsedData.endDate ? parsedData.endDate.split('T')[0] : '';
+    document.getElementById('editcomment').value = parsedData.comment || '';
+  } catch (error) {
+    console.log('Error populating edit modal:', error);
+  }
+}
+
+ </script>
+ 
+ 
+ 
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+ function updateEndDate() {
+  const startDateInput = document.getElementById('editstartDate'); // Corrected ID
+  const endDateInput = document.getElementById('editendDate');
+  const planSelect = document.getElementById('editplan'); // Also corrected ID
+
+  if (startDateInput.value && planSelect.value) {
+    const startDate = new Date(startDateInput.value);
+    const planDuration = planSelect.value;
+
+    let endDate;
+
+    // Parse the plan duration based on the selected option
+    switch (planDuration) {
+      case '3m':
+        endDate = addMonths(startDate, 3);
+        break;
+      case '6m':
+        endDate = addMonths(startDate, 6);
+        break;
+      case '9m':
+        endDate = addMonths(startDate, 9);
+        break;
+      case '1y':
+        endDate = addMonths(startDate, 12);
+        break;
+      default:
+        // Handle unknown plan duration
+        console.error('Unknown plan duration:', planDuration);
+        return;
+    }
+
+    // Format the endDate to 'YYYY-MM-DD' for input type='date'
+    const formattedEndDate = endDate.toISOString().split('T')[0];
+
+    endDateInput.value = formattedEndDate;
+  }
+}
+
+// Helper function to add months to a date
+function addMonths(date, months) {
+  const newDate = new Date(date);
+  newDate.setMonth(newDate.getMonth() + months);
+  return newDate;
 }
 
 </script>
+
+</body>
+</html>

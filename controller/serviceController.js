@@ -26,10 +26,13 @@ const serviceInsert = async (req, res) => {
         });
 
         // Save the document to the database
+
         await insertServiceData.save();
         
         // Redirect to '/data' after successful save
+        
         res.redirect('/data');
+        
     } catch (error) {
         console.error('Error saving service data:', error);
         res.status(500).send('Internal Server Error');
@@ -67,7 +70,7 @@ const verifyLogin = async (req, res) => {
         const name = req.body.email;
         const password = req.body.password;
 
-        if (name === name1 && password === password1) { 
+        if (name    === name1 && password === password1) { 
             
             req.session.adminid = name;
             res.redirect('/');
@@ -103,7 +106,29 @@ const userview = async (req, res) => {
     try {
         if (req.session.adminid) {
             const servicedata = await servicePlan.find({});
+            console.log("hello");
             res.render('tables', { dataservice: servicedata });
+        } else {
+            res.render('login', { message: '' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error'); 
+    }
+};
+
+const redclient = async (req, res) => {
+    try {
+        if (req.session.adminid) {
+            const currentDate = new Date();
+           
+            const redData = await serviceModel.find({
+                endDate: {
+                    $lte: new Date(currentDate.getTime() + 5 * 24 * 60 * 60 * 1000) // 5 days before current date
+                }
+            });
+            console.log("okk", redData);
+            res.render('red', { redData });
         } else {
             res.render('login', { message: '' });
         }
@@ -129,6 +154,36 @@ const deleteservice = async (req, res) => {
     }
 };
 
+const serviceEdit = async (req, res) => {
+    try {
+        console.log("hlooo");
+        const _id = req.params.id;
+        console.log(req.params); 
+        console.log(req.body);
+        const { editname, editPhonenumber, editplace, editplan, editstartDate, editendDate, editcomment } = req.body;
+
+        // Update existing document
+        const updatedServiceData = {
+            name: editname,
+            phoneNumber: editPhonenumber,
+            placelocation: editplace,
+            plan: editplan,
+            startDate: editstartDate, 
+            endDate: editendDate,
+            comment: editcomment
+        };
+
+        // Find the document by _id and update it
+        await serviceModel.findByIdAndUpdate(_id, updatedServiceData);
+
+        // Redirect to '/data' after successful save or update
+        res.redirect('/data');
+    } catch (error) {
+        console.error('Error saving or updating service data:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
 
 
 
@@ -142,6 +197,7 @@ module.exports = {
     userview,
     deleteservice,
     dashboard,
-   
+    serviceEdit,
+   redclient
 
 }

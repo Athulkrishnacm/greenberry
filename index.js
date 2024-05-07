@@ -2,14 +2,15 @@
 const express = require('express');
 const session = require('express-session'); 
 const bodyParser = require('body-parser');
- 
+const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const serviceController = require('./controller/serviceController');
 const serviceModel = require('./model/serviceModel');
 
-const { sendEmail } = require('./sendMail');
+
 
 const port = 3000;
 
@@ -111,47 +112,88 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
+
 app.get('/data', serviceController.userview);
+app.get('/red', serviceController.redclient);
+
+
+
 
 app.post('/data/:id',serviceController.deleteservice)
 
 app.post('/submit', serviceController.serviceInsert); 
+app.post('/editsubmit/:id', serviceController.serviceEdit);
+
+
 
 app.post('/login', serviceController.verifyLogin); 
 
 app.get('/userdata', serviceController.dashboard)
 
 
-  const getEmailData = async () => {
-    try {
-        const data = await serviceModel.find({ }).limit(1).exec();
-        return data;
-    } catch (error) {
-        console.error('Error fetching email data:', error);
-        throw error;
+// Nodemailer transporter setup
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+      user: 'battlefieldguts1@gmail.com',
+      pass: 'prqr xhuk gzyg iybc'
+  }
+});
+
+// Function to send an email with client details
+const sendEmail = async (details) => {
+  try {
+    const htmlContent = `
+    <h1>Client Details</h1>
+    <p>Name: ${details.name}</p>
+    <p>Phone Number: ${details.phoneNumber}</p>
+    <p>Location: ${details.placelocation}</p>
+    <p>Plan: ${details.plan}</p>
+    <p>Start Date: ${details.startDate}</p>
+    <p>End Date: ${details.endDate}</p>
+    <p>Comment: ${details.comment}</p>
+  `;
+
+      const mailOptions = {
+          from: 'battlefieldguts1@gmail.com',
+          to: 'athul@velveteksystems.com',
+          subject: 'Client Details',
+          html: htmlContent
+      };
+
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email sent:', info.response);
+
+      return info.response;
+  } catch (error) {
+      console.error('Error sending email:', error);
+      throw error;
+  }
+};
+
+
+
+
+
+app.post('/sendEmail', async (req, res) => {
+  try {
+
+    const data = await serviceModel.find({});
+    const clientDetails = data.length > 0 ? data[0] : {};
+
+    if (Object.keys(clientDetails).length === 0) {
+      throw new Error('No client details found in the database');
     }
-  };
 
-  app.post('/sendEmailWithData', async (req, res) => {
-    try {
-      const data = await getEmailData();
-        const clientDetails = data.length > 0 ? data[0] : {}; 
+    // Send email with client details
+    await sendEmail(clientDetails);
 
-        if (Object.keys(clientDetails).length === 0) {
-            throw new Error('No client details found in the database');
-        }
-
-      console.log(clientDetails);
-
-        await sendEmail(clientDetails);
-
-        res.status(200).send('Email sent successfully');
-    } catch (error) {
-        console.error('Error sending email with data:', error);
-        res.status(500).send('Internal Server Error');
-    }
-  });
-
+    res.status(200).send('Email sent successfully');
+  } catch (error) {
+    console.error('Error sending email with data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 // Start the server
 app.listen(port, () => {
