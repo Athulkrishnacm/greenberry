@@ -3,7 +3,7 @@ const express = require('express');
 const session = require('express-session'); 
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
-const jwt = require('jsonwebtoken');
+
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
