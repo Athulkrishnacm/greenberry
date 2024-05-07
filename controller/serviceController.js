@@ -52,11 +52,11 @@ const serviceInsert = async (req, res) => {
 const loginLoad = async (req, res) => {
    
     try {
-        if (req.session.adminid) {
+        
             res.redirect('/')
             return
-        }
-        res.render('login', { message: '' })
+        
+        
     } catch (error) {
         console.log(error.message)
     }
