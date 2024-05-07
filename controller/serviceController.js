@@ -86,12 +86,10 @@ const verifyLogin = async (req, res) => {
 
 const dashboard = async (req, res) => {
     try {
-        if (req.session.adminid) {
+       
             const UsersData = await servicePlan.find({});
             res.render('dashboard', { Users: UsersData }); // Pass Users data to the dashboard template
-        } else {
-            res.render('login', { message: 'Please Login ' });
-        }
+        
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
@@ -104,13 +102,11 @@ const dashboard = async (req, res) => {
 
 const userview = async (req, res) => {
     try {
-        if (req.session.adminid) {
+        
             const servicedata = await servicePlan.find({});
             console.log("hello");
             res.render('tables', { dataservice: servicedata });
-        } else {
-            res.render('login', { message: '' });
-        }
+        
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error'); 
@@ -119,7 +115,7 @@ const userview = async (req, res) => {
 
 const redclient = async (req, res) => {
     try {
-        if (req.session.adminid) {
+       
             const currentDate = new Date();
            
             const redData = await serviceModel.find({
@@ -129,9 +125,7 @@ const redclient = async (req, res) => {
             });
             console.log("okk", redData);
             res.render('red', { redData });
-        } else {
-            res.render('login', { message: '' });
-        }
+       
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error'); 

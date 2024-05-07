@@ -39,7 +39,7 @@ mongoose.connect(dbUrl)
 
   app.get('/', async (req, res) => {
     try {
-      if (req.session.adminid) {
+     
         const UsersData = await serviceModel.find({}).limit(10);
         const userCount = await serviceModel.countDocuments({});
   
@@ -77,9 +77,7 @@ mongoose.connect(dbUrl)
           }
       }); 
         // console.log(clientsByEndDateCount, "hello");
-      } else {
-        res.redirect('/login');
-      }
+      
     } catch (error) {
       console.error('Error rendering index:', error);
       res.status(500).send('Internal Server Error');
@@ -101,11 +99,9 @@ app.get('/logout', (req, res) => {
 
 
 app.get('/add', (req, res) => {
-  if( req.session.adminid){
+  
     res.render('forms');
-  }else{
-    res.redirect('/login')
-  }
+  
 });
 
 app.get('/login', (req, res) => {
