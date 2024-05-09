@@ -3,16 +3,19 @@ const express = require('express');
 const session = require('express-session'); 
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
-
+const cron = require('node-cron');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const serviceController = require('./controller/serviceController');
 const serviceModel = require('./model/serviceModel');
-
+const ObjectId = mongoose.Types.ObjectId;
+// const cors = require('cors');
+// app.use(cors());
 
 
 const port = 3000;
+
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,6 +32,9 @@ app.set('view engine', 'ejs');
 
 // Database connection
 const dbUrl = "mongodb+srv://velvetek:R9DqURcSA71B1YQh@miracle.ju08hft.mongodb.net/greenberry";
+
+
+
 mongoose.connect(dbUrl)
   .then(() => {
     console.log('Connected to database');
@@ -111,20 +117,67 @@ app.get('/login', (req, res) => {
 
 app.get('/data', serviceController.userview);
 app.get('/red', serviceController.redclient);
+app.get('/yellow', serviceController.yellowclient);
+app.get('/green', serviceController.greenclient);
 
 
+// Example route definition for handling DELETE requests
+app.delete('/delete/:id', async (req, res) => {
+  try {
+    const deletedData = await serviceModel.findByIdAndDelete(req.params.id);
+    if (!deletedData) {
+      return res.status(404).send('Data not found');
+    }
+    res.status(200).send('Data deleted successfully');
+  } catch (error) {
+    console.error('Error deleting data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 
-app.post('/data/:id',serviceController.deleteservice)
+app.post('/submit', serviceController.serviceInsert);
 
-app.post('/submit', serviceController.serviceInsert); 
-app.post('/editsubmit/:id', serviceController.serviceEdit);
+
 
 
 
 app.post('/login', serviceController.verifyLogin); 
 
 app.get('/userdata', serviceController.dashboard)
+
+
+
+app.post('/editsubmit', async (req, res) => {
+  try {
+    const { editDataId, editName, editPhoneNumber, editLocation, editPlan, editStartDate, editEndDate } = req.body;
+
+    if (!editDataId || !ObjectId.isValid(editDataId)) {
+      return res.status(400).send('Invalid editDataId');
+    }
+
+    // Update document in MongoDB using Mongoose
+    const updatedDocument = await serviceModel.findByIdAndUpdate(editDataId, {
+      name: editName,
+      phoneNumber: editPhoneNumber,
+      placelocation: editLocation,
+      plan: editPlan,
+      startDate: editStartDate,
+      endDate: editEndDate
+    });
+
+    if (!updatedDocument) {
+      return res.status(404).send('Document not found');
+    }
+
+    res.status(200).send('Edit successful');
+  } catch (error) {
+    console.error('Error editing data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 
 
 // Nodemailer transporter setup
@@ -152,7 +205,7 @@ const sendEmail = async (details) => {
 
       const mailOptions = {
           from: 'battlefieldguts1@gmail.com',
-          to: 'athul@velveteksystems.com',
+          to: 'greenberrygarden@gmail.com',
           subject: 'Client Details',
           html: htmlContent
       };
@@ -171,25 +224,48 @@ const sendEmail = async (details) => {
 
 
 
-app.post('/sendEmail', async (req, res) => {
+cron.schedule('0 12 * * *', async () => {
   try {
-
     const data = await serviceModel.find({});
     const clientDetails = data.length > 0 ? data[0] : {};
 
     if (Object.keys(clientDetails).length === 0) {
-      throw new Error('No client details found in the database');
+      console.error('No client details found in the database');
+      return;
     }
 
-    // Send email with client details
     await sendEmail(clientDetails);
-
-    res.status(200).send('Email sent successfully');
+    console.log('Sending email at 12 PM');
   } catch (error) {
-    console.error('Error sending email with data:', error);
+    console.error('Error sending email:', error);
+  }
+});
+
+
+app.post('/sendEmail', async (req, res) => {
+  try {
+    const requestData = req.body;
+
+    // Iterate over each data entry received from the client
+    for (const clientDetails of requestData) {
+      if (Object.keys(clientDetails).length === 0) {
+        console.warn('Skipping empty client details');
+        continue; // Skip empty entries
+      }
+
+      // Send email for each clientDetails entry
+      await sendEmail(clientDetails);
+    }
+
+    res.status(200).send('Email(s) sent successfully');
+  } catch (error) {
+    console.error('Error sending email(s):', error);
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+
 
 // Start the server
 app.listen(port, () => {

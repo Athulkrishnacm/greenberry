@@ -57,28 +57,48 @@
 
 <script>
   const sendEmail = async () => {
-      try {
-          const response = await fetch('/sendEmail', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-          });
+    try {
+      // Extracting data from the table
+      const tableRows = document.querySelectorAll('#data-table tbody tr');
+      const dataToSend = [];
 
-          if (response.ok) {
-              alert('Email sent successfully');
-          } else {
-              throw new Error('Failed to send email');
-          }
-      } catch (error) {
-          console.error('Error sending email:', error.message);
-          alert('Failed to send email');
+      tableRows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const rowData = {
+          name: cells[0].textContent,
+          phoneNumber: cells[1].textContent,
+          location: cells[2].textContent,
+          plan: cells[3].textContent,
+          startDate: cells[4].textContent,
+          endDate: cells[5].textContent
+        };
+        dataToSend.push(rowData);
+      });
+
+      // Send the data via fetch POST request
+      const response = await fetch('/sendEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSend)
+      });
+
+      if (response.ok) {
+        alert('Email sent successfully');
+      } else {
+        throw new Error('Failed to send email');
       }
+    } catch (error) {
+      console.error('Error sending email:', error.message);
+      alert('Failed to send email');
+    }
   };
 
   const sendEmailButton = document.getElementById('sendEmailButton');
   sendEmailButton.addEventListener('click', sendEmail);
 </script>
+
 
  
 

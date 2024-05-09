@@ -3,6 +3,7 @@ const servicePlan = require ('../model/serviceModel')
 const nodemailer = require('nodemailer');
 const serviceModel = require('../model/serviceModel');
 
+
 const serviceInsert = async (req, res) => {
     try {
         // Define the formatDate function to format dates as needed
@@ -104,7 +105,7 @@ const userview = async (req, res) => {
     try {
         
             const servicedata = await servicePlan.find({});
-            console.log("hello");
+            
             res.render('tables', { dataservice: servicedata });
         
     } catch (error) {
@@ -123,8 +124,47 @@ const redclient = async (req, res) => {
                     $lte: new Date(currentDate.getTime() + 5 * 24 * 60 * 60 * 1000) // 5 days before current date
                 }
             });
-            console.log("okk", redData);
+            
             res.render('red', { redData });
+       
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error'); 
+    }
+};
+
+const yellowclient = async (req, res) => {
+    try {
+       
+            const currentDate = new Date();
+           
+            const yellowData = await serviceModel.find({
+                endDate: {
+                    $gt: new Date(currentDate.getTime() + 5 * 24 * 60 * 60 * 1000), 
+                    $lte: new Date(currentDate.getTime() + 25 * 24 * 60 * 60 * 1000) // 25 days before current date
+                  }
+            });
+            
+            res.render('yellow', { yellowData });
+       
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error'); 
+    }
+};
+
+const greenclient = async (req, res) => {
+    try {
+       
+            const currentDate = new Date();
+           
+            const greenData = await serviceModel.find({
+                endDate: {
+                    $gt: new Date(currentDate.getTime() + 25 * 24 * 60 * 60 * 1000) 
+                  }
+            });
+            
+            res.render('green', { greenData });
        
     } catch (error) {
         console.log(error);
@@ -137,46 +177,45 @@ const redclient = async (req, res) => {
 //  delete service
 const deleteservice = async (req, res) => {
     try {
-        const deletedData = await servicePlan.findByIdAndDelete(req.params.id);
-        if (!deletedData) {
-            return res.status(404).send('Data not found'); // Respond with 404 if data not found
-        }
-        res.status(200).send('Data deleted successfully'); // Respond with success message
+      const deletedData = await servicePlan.findByIdAndDelete(req.params.id);
+      if (!deletedData) {
+        return res.status(404).send('Data not found'); // Respond with 404 if data not found
+      }
+      res.status(200).send('Data deleted successfully'); // Respond with success message
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+      console.error('Error deleting data:', error);
+      res.status(500).send('Internal Server Error');
     }
-};
+  };
+  
 
-const serviceEdit = async (req, res) => {
+  const serviceEdit = async (req, res) => {
     try {
-        console.log("hlooo");
-        const _id = req.params.id;
-        console.log(req.params); 
-        console.log(req.body);
-        const { editname, editPhonenumber, editplace, editplan, editstartDate, editendDate, editcomment } = req.body;
-
-        // Update existing document
-        const updatedServiceData = {
-            name: editname,
-            phoneNumber: editPhonenumber,
-            placelocation: editplace,
-            plan: editplan,
-            startDate: editstartDate, 
-            endDate: editendDate,
-            comment: editcomment
-        };
-
-        // Find the document by _id and update it
-        await serviceModel.findByIdAndUpdate(_id, updatedServiceData);
-
-        // Redirect to '/data' after successful save or update
-        res.redirect('/data');
+      const { id, name, Phonenumber, place, plan, startDate, endDate, comment } = req.body;
+  
+      const updatedServiceData = {
+        name,
+        phoneNumber: Phonenumber,
+        placelocation: place,
+        plan,
+        startDate,
+        endDate,
+        comment
+      };
+  
+      // Find document by ID and update
+      await serviceModel.findByIdAndUpdate(id, updatedServiceData);
+  
+      console.log('Edit successful');
+  
+      // Optionally send a response back
+      res.status(200).json({ message: 'Edit successful' });
     } catch (error) {
-        console.error('Error saving or updating service data:', error);
-        res.status(500).send('Internal Server Error');
+      console.error('Error editing data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-};
+  };
+  
 
 
 
@@ -192,6 +231,8 @@ module.exports = {
     deleteservice,
     dashboard,
     serviceEdit,
-   redclient
+    redclient,
+    greenclient,
+    yellowclient,
 
 }
