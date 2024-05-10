@@ -12,8 +12,7 @@ const serviceModel = require('./model/serviceModel');
 const ObjectId = mongoose.Types.ObjectId;
 const puppeteer = require('puppeteer');
 // const cors = require('cors');
-const accountSid = 'AC756541f78a56bb9dad183120338415a3';
-const authToken = 'e945c47d0afa7f89a18c1a65ee4d1b4a';
+
 
 
 
