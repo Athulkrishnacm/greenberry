@@ -10,6 +10,11 @@ const serviceSchema = mongoose.Schema({
         required : true,
 
     },
+    sqfeet:{
+        type : Number,
+        required : true,
+
+    },
     placelocation :{
         type : String,
         required : true,

@@ -3,43 +3,30 @@ const servicePlan = require ('../model/serviceModel')
 const nodemailer = require('nodemailer');
 const serviceModel = require('../model/serviceModel');
 
-
 const serviceInsert = async (req, res) => {
     try {
-        // Define the formatDate function to format dates as needed
-        const formatDate = (dateString) => {
-            const date = new Date(dateString);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        };
-
-        // Create a new servicePlan document
+        
         const insertServiceData = new servicePlan({
             name: req.body.name,
             phoneNumber: req.body.Phonenumber,
+            sqfeet: req.body.sqfeet, 
             placelocation: req.body.place,
             plan: req.body.plan,
-            startDate: formatDate(req.body.startDate), // Format start date
-            endDate: formatDate(req.body.endDate), // Format end date
+            startDate: formatDate(req.body.startDate),
+            endDate: formatDate(req.body.endDate),
             comment: req.body.comment
         });
 
         // Save the document to the database
-
         await insertServiceData.save();
-        
+
         // Redirect to '/data' after successful save
-        
         res.redirect('/data');
-        
     } catch (error) {
         console.error('Error saving service data:', error);
         res.status(500).send('Internal Server Error');
     }
 };
-
 
 
 
@@ -175,9 +162,9 @@ const greenclient = async (req, res) => {
 
 
 //  delete service
-const deleteservice = async (req, res) => {
+const deleteService = async (req, res) => {
     try {
-      const deletedData = await servicePlan.findByIdAndDelete(req.params.id);
+      const deletedData = await serviceModel.findByIdAndDelete(req.params.id);
       if (!deletedData) {
         return res.status(404).send('Data not found'); // Respond with 404 if data not found
       }
@@ -191,11 +178,12 @@ const deleteservice = async (req, res) => {
 
   const serviceEdit = async (req, res) => {
     try {
-      const { id, name, Phonenumber, place, plan, startDate, endDate, comment } = req.body;
+      const { id, name, Phonenumber, place, plan, startDate, endDate, comment,sqfeet } = req.body;
   
       const updatedServiceData = {
         name,
         phoneNumber: Phonenumber,
+        sqfeet,
         placelocation: place,
         plan,
         startDate,
@@ -228,7 +216,7 @@ module.exports = {
     verifyLogin,
     loginLoad,
     userview,
-    deleteservice,
+    deleteService,
     dashboard,
     serviceEdit,
     redclient,

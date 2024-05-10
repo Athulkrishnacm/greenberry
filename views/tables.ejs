@@ -16,6 +16,7 @@
             <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
               <th class="px-4 py-3">Name</th>
               <th class="px-4 py-3">Phone Number</th>
+              <th class="px-4 py-3">Sq Feet</th>
               <th class="px-4 py-3">Location</th>
               <th class="px-4 py-3">Plan</th>
               <th class="px-4 py-3">Start</th>
@@ -30,6 +31,7 @@
                 <td class="px-4 py-3"><%= data.name %></td>
                 <td hidden class="px-4 py-3"><%= data._id %></td>
                 <td class="px-4 py-3"><%= data.phoneNumber %></td>
+                <td class="px-4 py-3"><%= data.sqfeet %></td>
                 <td class="px-4 py-3"><%= data.placelocation %></td>
                 <td class="px-4 py-3"><%= data.plan %></td>
                 <td class="px-4 py-3"><%= data.startDate.toISOString().split('T')[0] %></td>
@@ -79,6 +81,10 @@
               <input type="text" class="form-control" id="editPhoneNumber" name="editPhoneNumber">
             </div>
             <div class="form-group">
+              <label for="editPhoneNumber">Sq Feet</label>
+              <input type="text" class="form-control" id="editsqfeet" name="editsqfeet">
+            </div>
+            <div class="form-group">
               <label for="editLocation">Location</label>
               <input type="text" class="form-control" id="editLocation" name="editLocation">
             </div>
@@ -125,6 +131,31 @@
   </div>
 </main>
 
+<script>
+  // Frontend JavaScript for deleting data
+function deleteData(dataId) {
+  if (!confirm('Are you sure you want to delete this item?')) {
+    return; // If user cancels, do nothing
+  }
+
+  fetch(`/delete/${dataId}`, {
+    method: 'DELETE'
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log('Data deleted successfully');
+      // Optionally refresh the page or update the UI after successful deletion
+      window.location.reload(); // Reload the page
+    } else {
+      console.error('Failed to delete data');
+    }
+  })
+  .catch(error => {
+    console.error('Error deleting data:', error);
+  });
+}
+
+</script>
 
 <script>
   function updateEndDate() {
@@ -209,6 +240,7 @@
     // Populate form fields with client data
     document.getElementById('editName').value = parsedData.name;
     document.getElementById('editPhoneNumber').value = parsedData.phoneNumber;
+    document.getElementById('editsqfeet').value = parsedData.sqfeet;
     document.getElementById('editLocation').value = parsedData.placelocation;
     document.getElementById('editPlan').value = parsedData.plan;
 

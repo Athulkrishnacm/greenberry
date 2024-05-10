@@ -10,14 +10,18 @@ const mongoose = require('mongoose');
 const serviceController = require('./controller/serviceController');
 const serviceModel = require('./model/serviceModel');
 const ObjectId = mongoose.Types.ObjectId;
+const puppeteer = require('puppeteer');
 // const cors = require('cors');
-// app.use(cors());
+const accountSid = 'AC756541f78a56bb9dad183120338415a3';
+const authToken = 'e945c47d0afa7f89a18c1a65ee4d1b4a';
+
+
+
+
+
 
 
 const port = 3000;
-
-
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -122,18 +126,7 @@ app.get('/green', serviceController.greenclient);
 
 
 // Example route definition for handling DELETE requests
-app.delete('/delete/:id', async (req, res) => {
-  try {
-    const deletedData = await serviceModel.findByIdAndDelete(req.params.id);
-    if (!deletedData) {
-      return res.status(404).send('Data not found');
-    }
-    res.status(200).send('Data deleted successfully');
-  } catch (error) {
-    console.error('Error deleting data:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+app.delete('/delete/:id', serviceController.deleteService);
 
 
 app.post('/submit', serviceController.serviceInsert);
@@ -263,6 +256,12 @@ app.post('/sendEmail', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+
+
+
+
 
 
 
